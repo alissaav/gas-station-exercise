@@ -5,7 +5,10 @@ import './App.css'
 
 type Station = {
   id: number;
+  fullAdress: string;
   address: string;
+  postcode: string;
+  district: string;
 };
 
 function App() {
@@ -18,20 +21,30 @@ function App() {
       .then((data) => {
         const parsedStations: Station[] = data.features.map((feature: any) => ({
           id: feature.attributes.objectid,
-          address: feature.attributes.adresse,
+          fullAddress: feature.attributes.adresse,
+          address: feature.attributes.adresse.split('(')[0],
+          postcode: feature.attributes.adresse.substring(
+            feature.attributes.adresse.indexOf('(') + 1,
+            feature.attributes.adresse.lastIndexOf(' ')
+          ),
+          district: feature.attributes.adresse.substring(
+            feature.attributes.adresse.lastIndexOf(' ') + 1,
+            feature.attributes.adresse.lastIndexOf(')')
+          )
         }));
         setStations(parsedStations);
       });
   }, []);
 
   
+  const listItems = stations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
 
   return (
     <>
       <h1>Tankstellen in Köln</h1>
-      <div className="gasstationlist">
-        
-      </div>
+      <ul className="gasstationlist">
+        {listItems}
+      </ul>
     </>
   )
 }
