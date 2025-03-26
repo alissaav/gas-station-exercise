@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 type Station = {
@@ -15,6 +13,7 @@ function App() {
   
   const [stations, setStations] = useState<Station[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc-address" | "desc-address" | "asc-postcode" | "desc-postcode" | "asc-district" | "desc-district">("asc-district");
 
   function handleSearchInput(e: any){
     setSearch(e.target.value);
@@ -45,8 +44,25 @@ function App() {
   const filteredStations = stations.filter((station) =>
     station.fullAddress.toLowerCase().includes(search.toLowerCase())
   );
+
+  const sortedStations = [...filteredStations].sort((a, b) => {
+    switch (sortOrder) {
+      case 'asc-address':
+        return a.address.localeCompare(b.address);
+      case 'desc-address':
+        return b.address.localeCompare(a.address);
+      case 'asc-postcode':
+        return a.postcode.localeCompare(b.postcode);
+      case 'desc-postcode':
+        return b.postcode.localeCompare(a.postcode);
+      case 'asc-district':
+        return a.district.localeCompare(b.district);
+      case 'desc-district':
+        return b.district.localeCompare(a.district);
+    }
+  })
   
-  const listItems = filteredStations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
+  const listItems = sortedStations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
 
   return (
     <>
