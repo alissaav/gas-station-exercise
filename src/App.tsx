@@ -17,7 +17,22 @@ function App() {
 
   function handleSearchInput(e: any){
     setSearch(e.target.value);
-    console.log(search)
+  }
+
+  function handleOrderChange(order: string){
+    if(order === sortOrder){
+      switch (order) {
+        case "asc-address": 
+          setSortOrder("desc-address");
+          break;
+        case "asc-postcode": 
+          setSortOrder("desc-postcode");
+          break;
+        case "asc-district": 
+          setSortOrder("desc-district");
+          break;
+      }
+    } else setSortOrder(order);
   }
 
   useEffect(() => {
@@ -62,15 +77,26 @@ function App() {
     }
   })
   
-  const listItems = sortedStations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
+  const rows = sortedStations.map(station => 
+  <tr>
+    <td className="address">{station.address}</td> 
+    <td className="postcode">{station.postcode}</td> 
+    <td className="district">{station.district}</td> 
+  </tr>
+  );
 
   return (
     <>
       <h1>Tankstellen in Köln</h1>
       <input value={search} onChange={handleSearchInput}></input>
-      <div className="gasstationlist">
-        {listItems}
-      </div>
+      <table className="station-table">
+        <tr className="table-header">
+          <th className="address" onClick={() => handleOrderChange("asc-address")}>Adresse</th>
+          <th className="postcode" onClick={() => handleOrderChange("asc-postcode")}>Postleitzahl</th> 
+          <th className="district" onClick={() => handleOrderChange("asc-district")}>Stadtteil</th> 
+        </tr>
+        {rows}
+      </table>
     </>
   )
 }
