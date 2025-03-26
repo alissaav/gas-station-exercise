@@ -5,7 +5,7 @@ import './App.css'
 
 type Station = {
   id: number;
-  fullAdress: string;
+  fullAddress: string;
   address: string;
   postcode: string;
   district: string;
@@ -14,6 +14,12 @@ type Station = {
 function App() {
   
   const [stations, setStations] = useState<Station[]>([]);
+  const [search, setSearch] = useState<string>("");
+
+  function handleSearchInput(e: any){
+    setSearch(e.target.value);
+    console.log(search)
+  }
 
   useEffect(() => {
     fetch("https://geoportal.stadt-koeln.de/arcgis/rest/services/verkehr/gefahrgutstrecken/MapServer/0/query?where=objectid+is+not+null&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson")
@@ -36,15 +42,19 @@ function App() {
       });
   }, []);
 
+  const filteredStations = stations.filter((station) =>
+    station.fullAddress.toLowerCase().includes(search.toLowerCase())
+  );
   
-  const listItems = stations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
+  const listItems = filteredStations.map(station => <div><span>{station.address}</span> <span>{station.postcode}</span> <span>{station.district}</span> </div>);
 
   return (
     <>
       <h1>Tankstellen in Köln</h1>
-      <ul className="gasstationlist">
+      <input value={search} onChange={handleSearchInput}></input>
+      <div className="gasstationlist">
         {listItems}
-      </ul>
+      </div>
     </>
   )
 }
