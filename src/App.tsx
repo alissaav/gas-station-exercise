@@ -83,7 +83,7 @@ function App() {
   
   const rows = sortedStations.map(station => 
     <a href={"https://www.google.com/maps/place/" + station.lat + "," + station.lng} target="_blank" className="">
-      <div className="flex flex-row w-full gap-1 rounded-md p-1 hover:bg-[#1a1a1a]">
+      <div className="flex flex-row w-full gap-1 rounded-md px-1 py-2 hover:bg-[#1a1a1a]">
         <span className="address w-[240px] text-left pl-3">{station.address}</span> 
         <span className="postcode w-[130px]">{station.postcode}</span> 
         <span className="district w-[200px] text-left pl-3">{station.district}</span> 
@@ -108,7 +108,7 @@ function App() {
       </div>
 
       <div className="flex flex-col mx-auto">
-        <div className="flex flex-row w-full gap-1" >
+        <div className="flex flex-row w-full gap-1 mb-2" >
           <button className="w-[240px] text-left" onClick={() => handleOrderChange("asc-address")}>Adresse</button>
           <button className="w-[130px]" onClick={() => handleOrderChange("asc-postcode")}>Postleitzahl</button>
           <button className="w-[200px] text-left" onClick={() => handleOrderChange("asc-district")}>Stadtteil</button>
